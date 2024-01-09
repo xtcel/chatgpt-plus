@@ -10,30 +10,38 @@
             <el-input v-model="chatName" class="w-50 m-2" size="small" placeholder="搜索会话" @keyup="searchChat">
               <template #prefix>
                 <el-icon class="el-input__icon">
-                  <Search/>
+                  <Search />
                 </el-icon>
               </template>
             </el-input>
           </div>
 
-          <div class="content" :style="{height: leftBoxHeight+'px'}">
+          <div class="content" :style="{ height: leftBoxHeight + 'px' }">
             <el-row v-for="chat in chatList" :key="chat.chat_id">
-              <div :class="chat.chat_id === activeChat.chat_id?'chat-list-item active':'chat-list-item'"
-                   @click="changeChat(chat)">
-                <el-image :src="chat.icon" class="avatar"/>
+              <div :class="chat.chat_id === activeChat.chat_id ? 'chat-list-item active' : 'chat-list-item'"
+                @click="changeChat(chat)">
+                <el-image :src="chat.icon" class="avatar" />
                 <span class="chat-title-input" v-if="chat.edit">
-              <el-input v-model="tmpChatTitle" size="small" @keydown="titleKeydown($event, chat)"
-                        placeholder="请输入会话标题"/>
-            </span>
+                  <el-input v-model="tmpChatTitle" size="small" @keydown="titleKeydown($event, chat)"
+                    placeholder="请输入会话标题" />
+                </span>
                 <span v-else class="chat-title">{{ chat.title }}</span>
                 <span class="btn btn-check" v-if="chat.edit || chat.removing">
-                <el-icon @click="confirm($event, chat)"><Check/></el-icon>
-                <el-icon @click="cancel($event, chat)"><Close/></el-icon>
-              </span>
+                  <el-icon @click="confirm($event, chat)">
+                    <Check />
+                  </el-icon>
+                  <el-icon @click="cancel($event, chat)">
+                    <Close />
+                  </el-icon>
+                </span>
                 <span class="btn" v-else>
-                <el-icon title="编辑" @click="editChatTitle($event, chat)"><Edit/></el-icon>
-                <el-icon title="删除会话" @click="removeChat($event, chat)"><Delete/></el-icon>
-              </span>
+                  <el-icon title="编辑" @click="editChatTitle($event, chat)">
+                    <Edit />
+                  </el-icon>
+                  <el-icon title="删除会话" @click="removeChat($event, chat)">
+                    <Delete />
+                  </el-icon>
+                </span>
               </div>
             </el-row>
           </div>
@@ -41,38 +49,41 @@
 
         <div class="tool-box">
           <el-dropdown :hide-on-click="true" class="user-info" trigger="click" v-if="isLogin">
-                        <span class="el-dropdown-link">
-                          <el-image :src="loginUser.avatar"/>
-                          <span class="username">{{ loginUser.nickname }}</span>
-                          <el-icon><ArrowDown/></el-icon>
-                        </span>
+            <span class="el-dropdown-link">
+              <el-image :src="loginUser.avatar" />
+              <span class="username">{{ loginUser.nickname }}</span>
+              <el-icon>
+                <ArrowDown />
+              </el-icon>
+            </span>
             <template #dropdown>
               <el-dropdown-menu style="width: 296px;">
                 <el-dropdown-item @click="showConfig">
                   <el-icon>
-                    <Tools/>
+                    <Tools />
                   </el-icon>
                   <span>账户信息</span>
                 </el-dropdown-item>
 
                 <el-dropdown-item @click="clearAllChats">
                   <el-icon>
-                    <Delete/>
+                    <Delete />
                   </el-icon>
                   <span>清除所有会话</span>
                 </el-dropdown-item>
 
                 <el-dropdown-item @click="logout">
                   <i class="iconfont icon-logout"></i>
-                  <span>注销</span>
+                  <span>退出</span>
                 </el-dropdown-item>
 
                 <el-dropdown-item>
                   <i class="iconfont icon-github"></i>
                   <span>
                     powered by
-                    <el-link type="primary" href="https://github.com/yangjian102621/chatgpt-plus" target="_blank">chatgpt-plus-v3</el-link>
-                 </span>
+                    <el-link type="primary" href="https://github.com/yangjian102621/chatgpt-plus"
+                      target="_blank">chatgpt-plus-v3</el-link>
+                  </span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -84,12 +95,7 @@
           <div class="chat-config">
             <span class="role-select-label">聊天角色：</span>
             <el-select v-model="roleId" filterable placeholder="角色" class="role-select" @change="newChat">
-              <el-option
-                  v-for="item in roles"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-              >
+              <el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id">
                 <div class="role-option">
                   <el-image :src="item.icon"></el-image>
                   <span>{{ item.name }}</span>
@@ -98,16 +104,11 @@
             </el-select>
 
             <el-select v-model="modelID" placeholder="模型" @change="newChat">
-              <el-option
-                  v-for="item in models"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-              />
+              <el-option v-for="item in models" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
             <el-button type="primary" @click="newChat">
               <el-icon>
-                <Plus/>
+                <Plus />
               </el-icon>
               新建对话
             </el-button>
@@ -119,42 +120,28 @@
 
             <el-button type="warning" @click="showFeedbackDialog = true">
               <el-icon>
-                <Promotion/>
+                <Promotion />
               </el-icon>
               <span>意见反馈</span>
             </el-button>
           </div>
         </div>
 
-        <div class="right-box" :style="{height: mainWinHeight+'px'}">
+        <div class="right-box" :style="{ height: mainWinHeight + 'px' }">
           <div>
             <div id="container">
-              <div class="chat-box" id="chat-box" :style="{height: chatBoxHeight+'px'}">
+              <div class="chat-box" id="chat-box" :style="{ height: chatBoxHeight + 'px' }">
                 <div v-if="showHello">
-                  <welcome @send="autofillPrompt"/>
+                  <welcome @send="autofillPrompt" />
                 </div>
                 <div v-for="item in chatData" :key="item.id" v-else>
-                  <chat-prompt
-                      v-if="item.type==='prompt'"
-                      :icon="item.icon"
-                      :created-at="dateFormat(item['created_at'])"
-                      :tokens="item['tokens']"
-                      :model="getModelValue(modelID)"
-                      :content="item.content"/>
-                  <chat-reply v-else-if="item.type==='reply'"
-                              :icon="item.icon"
-                              :org-content="item.orgContent"
-                              :created-at="dateFormat(item['created_at'])"
-                              :tokens="item['tokens']"
-                              :content="item.content"/>
-                  <chat-mid-journey v-else-if="item.type==='mj'"
-                                    :content="item.content"
-                                    :role-id="item.role_id"
-                                    :chat-id="item.chat_id"
-                                    :icon="item.icon"
-                                    @disable-input="disableInput(true)"
-                                    @enable-input="enableInput"
-                                    :created-at="dateFormat(item['created_at'])"/>
+                  <chat-prompt v-if="item.type === 'prompt'" :icon="item.icon" :created-at="dateFormat(item['created_at'])"
+                    :tokens="item['tokens']" :model="getModelValue(modelID)" :content="item.content" />
+                  <chat-reply v-else-if="item.type === 'reply'" :icon="item.icon" :org-content="item.orgContent"
+                    :created-at="dateFormat(item['created_at'])" :tokens="item['tokens']" :content="item.content" />
+                  <chat-mid-journey v-else-if="item.type === 'mj'" :content="item.content" :role-id="item.role_id"
+                    :chat-id="item.chat_id" :icon="item.icon" @disable-input="disableInput(true)"
+                    @enable-input="enableInput" :created-at="dateFormat(item['created_at'])" />
                 </div>
               </div><!-- end chat box -->
 
@@ -162,14 +149,14 @@
                 <div class="btn-box">
                   <el-button type="info" v-if="showStopGenerate" @click="stopGenerate" plain>
                     <el-icon>
-                      <VideoPause/>
+                      <VideoPause />
                     </el-icon>
                     停止生成
                   </el-button>
 
                   <el-button type="primary" v-if="showReGenerate" @click="reGenerate" plain>
                     <el-icon>
-                      <RefreshRight/>
+                      <RefreshRight />
                     </el-icon>
                     重新生成
                   </el-button>
@@ -178,18 +165,13 @@
 
               <div class="input-box">
                 <div class="input-container">
-                  <el-input
-                      ref="textInput"
-                      v-model="prompt"
-                      v-on:keydown="inputKeyDown"
-                      autofocus
-                      type="textarea"
-                      :rows="2"
-                      placeholder="按 Enter 键发送消息，使用 Ctrl + Enter 换行"
-                  />
+                  <el-input ref="textInput" v-model="prompt" v-on:keydown="inputKeyDown" autofocus type="textarea"
+                    :rows="2" placeholder="按 Enter 键发送消息，使用 Ctrl + Enter 换行" />
                   <span class="send-btn">
                     <el-button @click="sendMessage">
-                      <el-icon><Promotion/></el-icon>
+                      <el-icon>
+                        <Promotion />
+                      </el-icon>
                     </el-button>
                   </span>
                 </div>
@@ -201,17 +183,12 @@
       </el-main>
     </el-container>
 
-    <el-dialog
-        v-model="showFeedbackDialog"
-        :show-close="true"
-        width="340px"
-        title="意见反馈"
-    >
+    <el-dialog v-model="showFeedbackDialog" :show-close="true" width="340px" title="意见反馈">
       <el-alert type="info" :closable="false">
         <div style="font-size: 14px">
           如果您对本项目有任何改进意见，您可以通过 Github
           <el-link style="color: #f56c6c; font-weight: bold;"
-                   href="https://github.com/yangjian102621/chatgpt-plus/issues">
+            href="https://github.com/yangjian102621/chatgpt-plus/issues">
             提交改进意见
           </el-link>
           或者通过扫描下面的微信二维码加入 AI 技术交流群。
@@ -219,30 +196,26 @@
       </el-alert>
 
       <div style="text-align: center;padding-top: 10px;">
-        <el-image src="/images/wx.png"/>
+        <el-image src="/images/wx.png" />
       </div>
     </el-dialog>
 
-    <el-dialog
-        v-model="showDemoNotice"
-        :show-close="true"
-        title="网站公告"
-    >
+    <el-dialog v-model="showDemoNotice" :show-close="true" title="网站公告">
       <div class="notice">
         <el-text type="primary">
           注意：当前站点仅为开源项目
           <a style="color: #F56C6C" href="https://github.com/yangjian102621/chatgpt-plus" target="_blank">ChatPlus</a>
-          的演示项目，本项目单纯就是给大家体验项目功能使用。<br/>
+          的演示项目，本项目单纯就是给大家体验项目功能使用。<br />
 
-          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br/>
-          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br/>
-          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br/>
+          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br />
+          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br />
+          体验额度用完之后请不要在当前站点进行任何充值操作！！！<br />
 
           如果觉得好用你就花几分钟自己部署一套，没有API KEY 的同学可以去
           <a href="https://gpt.bemore.lol" target="_blank"
-             style="font-size: 20px;color:#F56C6C">https://gpt.bemore.lol</a>
-          购买，现在有超级优惠，价格远低于 OpenAI 官方。<br/>
-          GPT-3.5，GPT-4，DALL-E3 绘图......你都可以随意使用，无需魔法。<br/>
+            style="font-size: 20px;color:#F56C6C">https://gpt.bemore.lol</a>
+          购买，现在有超级优惠，价格远低于 OpenAI 官方。<br />
+          GPT-3.5，GPT-4，DALL-E3 绘图......你都可以随意使用，无需魔法。<br />
 
           本项目源码地址：
           <a href="https://github.com/yangjian102621/chatgpt-plus" target="_blank">
@@ -256,13 +229,11 @@
       </div>
     </el-dialog>
 
-    <config-dialog v-if="isLogin" :show="showConfigDialog" :models="models" @hide="showConfigDialog = false"/>
+    <config-dialog v-if="isLogin" :show="showConfigDialog" :models="models" @hide="showConfigDialog = false" />
   </div>
-
-
 </template>
 <script setup>
-import {nextTick, onMounted, ref} from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import ChatPrompt from "@/components/ChatPrompt.vue";
 import ChatReply from "@/components/ChatReply.vue";
 import {
@@ -279,15 +250,15 @@ import {
   VideoPause
 } from '@element-plus/icons-vue'
 import 'highlight.js/styles/a11y-dark.css'
-import {dateFormat, isMobile, randString, removeArrayItem, UUID} from "@/utils/libs";
-import {ElMessage, ElMessageBox} from "element-plus";
+import { dateFormat, isMobile, randString, removeArrayItem, UUID } from "@/utils/libs";
+import { ElMessage, ElMessageBox } from "element-plus";
 import hl from "highlight.js";
-import {getSessionId, getUserToken, removeUserToken} from "@/store/session";
-import {httpGet, httpPost} from "@/utils/http";
-import {useRouter} from "vue-router";
+import { getSessionId, getUserToken, removeUserToken } from "@/store/session";
+import { httpGet, httpPost } from "@/utils/http";
+import { useRouter } from "vue-router";
 import Clipboard from "clipboard";
 import ConfigDialog from "@/components/ConfigDialog.vue";
-import {checkSession} from "@/action/session";
+import { checkSession } from "@/action/session";
 import Welcome from "@/components/Welcome.vue";
 import ChatMidJourney from "@/components/ChatMidJourney.vue";
 
@@ -475,7 +446,7 @@ const confirm = function (event, chat) {
     if (!chat.chat_id) {
       return ElMessage.error("对话 ID 为空，请刷新页面再试！");
     }
-    httpPost('/api/chat/update', {chat_id: chat.chat_id, title: tmpChatTitle.value}).then(() => {
+    httpPost('/api/chat/update', { chat_id: chat.chat_id, title: tmpChatTitle.value }).then(() => {
       chat.title = tmpChatTitle.value;
       chat.edit = false;
     }).catch(e => {
@@ -581,7 +552,7 @@ const connect = function (chat_id, role_id) {
         content: _role['hello_msg'],
         orgContent: _role['hello_msg'],
       })
-      ElMessage.success({message: "对话连接成功！", duration: 1000})
+      ElMessage.success({ message: "对话连接成功！", duration: 1000 })
     } else { // 加载聊天记录
       loadChatHistory(chat_id);
     }
@@ -646,7 +617,7 @@ const connect = function (chat_id, role_id) {
 
           // 获取 token
           const reply = chatData.value[chatData.value.length - 1]
-          httpPost("/api/chat/tokens", {text: "", model: getModelValue(modelID.value), chat_id: chat_id}).then(res => {
+          httpPost("/api/chat/tokens", { text: "", model: getModelValue(modelID.value), chat_id: chat_id }).then(res => {
             reply['created_at'] = new Date().getTime();
             reply['tokens'] = res.data;
             // 将聊天框的滚动条滑动到最底部
@@ -757,17 +728,17 @@ const showConfig = function () {
 
 const clearAllChats = function () {
   ElMessageBox.confirm(
-      '确认要清空所有的会话历史记录吗?<br/>此操作不可以撤销！',
-      '操作提示：',
-      {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-        dangerouslyUseHTMLString: true,
-        showClose: true,
-        closeOnClickModal: false,
-        center: true,
-      }
+    '确认要清空所有的会话历史记录吗?<br/>此操作不可以撤销！',
+    '操作提示：',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+      dangerouslyUseHTMLString: true,
+      showClose: true,
+      closeOnClickModal: false,
+      center: true,
+    }
   ).then(() => {
     httpGet("/api/chat/clear").then(() => {
       ElMessage.success("操作成功！");

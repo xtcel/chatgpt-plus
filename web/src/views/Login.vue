@@ -4,7 +4,7 @@
     <div class="main">
       <div class="contain">
         <div class="logo">
-          <el-image src="images/logo.png" fit="cover"/>
+          <el-image src="images/logo.png" fit="cover" />
         </div>
         <div class="header">{{ title }}</div>
         <div class="content">
@@ -12,7 +12,7 @@
             <el-input placeholder="手机号/邮箱地址" size="large" v-model="username" autocomplete="off">
               <template #prefix>
                 <el-icon>
-                  <UserFilled/>
+                  <UserFilled />
                 </el-icon>
               </template>
             </el-input>
@@ -22,7 +22,7 @@
             <el-input placeholder="请输入密码" size="large" v-model="password" show-password autocomplete="off">
               <template #prefix>
                 <el-icon>
-                  <Lock/>
+                  <Lock />
                 </el-icon>
               </template>
             </el-input>
@@ -39,10 +39,10 @@
         </div>
       </div>
 
-      <reset-pass @hide="showResetPass = false" :show="showResetPass"/>
+      <reset-pass @hide="showResetPass = false" :show="showResetPass" />
 
       <footer class="footer">
-        <footer-bar/>
+        <footer-bar />
       </footer>
     </div>
   </div>
@@ -50,21 +50,21 @@
 
 <script setup>
 
-import {onMounted, onUnmounted, ref} from "vue";
-import {Lock, UserFilled} from "@element-plus/icons-vue";
-import {httpPost} from "@/utils/http";
-import {ElMessage} from "element-plus";
-import {useRouter} from "vue-router";
+import { onMounted, onUnmounted, ref } from "vue";
+import { Lock, UserFilled } from "@element-plus/icons-vue";
+import { httpPost } from "@/utils/http";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 import FooterBar from "@/components/FooterBar.vue";
-import {isMobile} from "@/utils/libs";
-import {checkSession} from "@/action/session";
-import {setUserToken} from "@/store/session";
-import {validateEmail, validateMobile} from "@/utils/validate";
-import {prevRoute} from "@/router";
+import { isMobile } from "@/utils/libs";
+import { checkSession } from "@/action/session";
+import { setUserToken } from "@/store/session";
+import { validateEmail, validateMobile } from "@/utils/validate";
+import { prevRoute } from "@/router";
 import ResetPass from "@/components/ResetPass.vue";
 
 const router = useRouter();
-const title = ref('ChatPlus 用户登录');
+const title = ref('YongAI 用户登录');
 const username = ref(process.env.VUE_APP_USER);
 const password = ref(process.env.VUE_APP_PASS);
 const showResetPass = ref(false)
@@ -99,7 +99,7 @@ const login = function () {
     return ElMessage.error('请输入密码');
   }
 
-  httpPost('/api/user/login', {username: username.value.trim(), password: password.value.trim()}).then((res) => {
+  httpPost('/api/user/login', { username: username.value.trim(), password: password.value.trim() }).then((res) => {
     setUserToken(res.data)
     if (prevRoute.path === '' || prevRoute.path === '/register') {
       if (isMobile()) {

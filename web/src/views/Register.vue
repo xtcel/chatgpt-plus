@@ -5,45 +5,39 @@
       <div class="page-inner">
         <div class="contain" v-if="enableRegister">
           <div class="logo">
-            <el-image src="images/logo.png" fit="cover"/>
+            <el-image src="images/logo.png" fit="cover" />
           </div>
 
           <div class="header">{{ title }}</div>
           <div class="content">
             <el-form :model="formData" label-width="120px" ref="formRef">
               <div class="block">
-                <el-input :placeholder="placeholder"
-                          size="large"
-                          v-model="formData.username"
-                          autocomplete="off">
+                <el-input :placeholder="placeholder" size="large" v-model="formData.username" autocomplete="off">
                   <template #prefix>
                     <el-icon>
-                      <Iphone/>
+                      <Iphone />
                     </el-icon>
                   </template>
                 </el-input>
               </div>
 
               <div class="block">
-                <el-input placeholder="请输入密码(8-16位)"
-                          maxlength="16" size="large"
-                          v-model="formData.password" show-password
-                          autocomplete="off">
+                <el-input placeholder="请输入密码(8-16位)" maxlength="16" size="large" v-model="formData.password" show-password
+                  autocomplete="off">
                   <template #prefix>
                     <el-icon>
-                      <Lock/>
+                      <Lock />
                     </el-icon>
                   </template>
                 </el-input>
               </div>
 
               <div class="block">
-                <el-input placeholder="重复密码(8-16位)"
-                          size="large" maxlength="16" v-model="formData.repass" show-password
-                          autocomplete="off">
+                <el-input placeholder="重复密码(8-16位)" size="large" maxlength="16" v-model="formData.repass" show-password
+                  autocomplete="off">
                   <template #prefix>
                     <el-icon>
-                      <Lock/>
+                      <Lock />
                     </el-icon>
                   </template>
                 </el-input>
@@ -52,31 +46,25 @@
               <div class="block" v-if="enableMobile || enableEmail">
                 <el-row :gutter="10">
                   <el-col :span="12">
-                    <el-input placeholder="验证码"
-                              size="large" maxlength="30"
-                              v-model="formData.code"
-                              autocomplete="off">
+                    <el-input placeholder="验证码" size="large" maxlength="30" v-model="formData.code" autocomplete="off">
                       <template #prefix>
                         <el-icon>
-                          <Checked/>
+                          <Checked />
                         </el-icon>
                       </template>
                     </el-input>
                   </el-col>
                   <el-col :span="12">
-                    <send-msg size="large" :receiver="formData.username"/>
+                    <send-msg size="large" :receiver="formData.username" />
                   </el-col>
                 </el-row>
               </div>
 
               <div class="block">
-                <el-input placeholder="邀请码"
-                          size="large"
-                          v-model="formData.invite_code"
-                          autocomplete="off">
+                <el-input placeholder="邀请码" size="large" v-model="formData.invite_code" autocomplete="off">
                   <template #prefix>
                     <el-icon>
-                      <Message/>
+                      <Message />
                     </el-icon>
                   </template>
                 </el-input>
@@ -99,14 +87,14 @@
             <template #sub-title>
               <p>抱歉，系统已关闭注册功能，请联系管理员添加账号！</p>
               <div class="wechat-card">
-                <el-image :src="wxImg"/>
+                <el-image :src="wxImg" />
               </div>
             </template>
           </el-result>
         </div>
 
         <footer class="footer">
-          <footer-bar/>
+          <footer-bar />
         </footer>
       </div>
     </div>
@@ -115,18 +103,18 @@
 
 <script setup>
 
-import {ref} from "vue";
-import {Checked, Iphone, Lock, Message} from "@element-plus/icons-vue";
-import {httpGet, httpPost} from "@/utils/http";
-import {ElMessage} from "element-plus";
-import {useRouter} from "vue-router";
+import { ref } from "vue";
+import { Checked, Iphone, Lock, Message } from "@element-plus/icons-vue";
+import { httpGet, httpPost } from "@/utils/http";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 import FooterBar from "@/components/FooterBar.vue";
 import SendMsg from "@/components/SendMsg.vue";
-import {arrayContains} from "@/utils/libs";
-import {setUserToken} from "@/store/session";
+import { arrayContains } from "@/utils/libs";
+import { setUserToken } from "@/store/session";
 
 const router = useRouter();
-const title = ref('ChatPlus 用户注册');
+const title = ref('YongAI 用户注册');
 const formData = ref({
   username: '',
   password: '',
@@ -159,7 +147,7 @@ httpGet("/api/admin/config/get?key=system").then(res => {
   ElMessage.error("获取系统配置失败：" + e.message)
 })
 
-httpGet("/api/invite/hits", {code: formData.value.invite_code}).then(() => {
+httpGet("/api/invite/hits", { code: formData.value.invite_code }).then(() => {
 }).catch(() => {
 })
 
